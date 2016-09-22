@@ -235,8 +235,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/09/19/ccc/" itemprop="url">
-                  看这里
+                <a class="post-title-link" href="/2016/09/22/闭包/" itemprop="url">
+                  闭包
                 </a>
               
             
@@ -249,8 +249,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-19T19:58:27+08:00" content="2016-09-19">
-              2016-09-19
+            <time itemprop="dateCreated" datetime="2016-09-22T09:39:24+08:00" content="2016-09-22">
+              2016-09-22
             </time>
           </span>
 
@@ -278,9 +278,15 @@
 
       
         
-          
-            <h2 id="李芷若"><a href="#李芷若" class="headerlink" title="李芷若"></a>李芷若</h2><h3 id="是我最喜欢的人啊！！"><a href="#是我最喜欢的人啊！！" class="headerlink" title="是我最喜欢的人啊！！"></a>是我最喜欢的人啊！！</h3>
-          
+          <p>闭包是Javascript的一个难点，听起来很高大上，可能你之前之听过闭包，但并不知道这到底是个什么东西，其实在我们平常编写的代码中，闭包无处不在。<br>以下是我学习闭包的一些心得，希望能对渴望理解闭包的你有一些小小的帮助。</p>
+<p>##变量的作用域</p>
+<p>理解闭包首先需要了解的就是变量的作用域。<br>变量的作用域分为两种：局部变量和全局变量。<br>在Javascript中函数内部可以直接读取全局变量，而在函数外部不能读取函数的局部变量。</p>
+<p>###函数内部读取全局变量<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var a = 111;</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">f1</span></span>()&#123;</div><div class="line">	alert(a);</div><div class="line">&#125;</div><div class="line">f1(); //111</div></pre></td></tr></table></figure></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/09/22/闭包/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -457,6 +463,13 @@
 
           
 
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
           
 
         </nav>
