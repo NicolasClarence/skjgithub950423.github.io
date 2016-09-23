@@ -258,6 +258,13 @@
 
           
             
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/22/闭包/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/22/闭包/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -278,25 +285,14 @@
 
       
         
-          
-            <p>闭包是Javascript的一个难点，听起来很高大上，可能你之前之听过闭包，但并不知道这到底是个什么东西，其实在我们平常编写的代码中，闭包无处不在。<br>以下是我学习闭包的一些心得，希望能对渴望理解闭包的你有一些小小的帮助。</p>
-<p>##变量的作用域</p>
-<p>理解闭包首先需要了解的就是变量的作用域。<br>变量的作用域分为两种：局部变量和全局变量。<br>在Javascript中函数内部可以直接读取全局变量，而在函数外部不能读取函数的局部变量。</p>
-<p>###函数内部读取全局变量<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var a = 111;</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">f1</span></span>()&#123;</div><div class="line">	alert(a);</div><div class="line">&#125;</div><div class="line">f1(); //111</div></pre></td></tr></table></figure></p>
-<p>###函数外部读取局部变量<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">f2</span></span>()&#123;</div><div class="line">	var a = 111;</div><div class="line">&#125;</div><div class="line">alert(a); //error</div></pre></td></tr></table></figure></p>
-<p>##闭包到底是什么</p>
-<p>下面的这段代码展示了什么是闭包</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">foo</span></span>()&#123;</div><div class="line">    var a = 2;</div><div class="line">    <span class="keyword">function</span> <span class="function"><span class="title">bar</span></span>()&#123;</div><div class="line">        alert(a);</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> bar;</div><div class="line">&#125;</div><div class="line">var baz = foo();</div><div class="line">baz();   //2</div></pre></td></tr></table></figure>
-<p>函数bar能够访问函数foo的局部变量a，而函数bar又被当作函数foo的返回值，在函数外部定义一个全局变量baz，在foo函数执行后他的返回值（也就是bar函数）被赋给了变量baz，下面执行baz函数的时候实际上就是执行了foo函数内部的bar函数。</p>
-<p>在正常的情况下，函数执行完毕后其作用域就会被销毁，其局部变量也会被一并销毁，但在之后调用baz函数的时候，仍然取得了a的值，这就是闭包的神奇之处。</p>
-<p>在执行baz函数的时候，函数的内部作用域仍然存在，因为他依然被bar()使用,因为bar函数声明在foo函数内部，所以它拥有涵盖foo作用域的闭包，使得该作用域能够一直存活，以供bar()在之后的·任何时间进行引用。</p>
-<p>bar()对foo函数作用域的引用就叫做闭包。</p>
-<p>bar()函数在定义时的词法作用域外被调用，闭包使得函数可以继续访问定义时的词法作用域。</p>
-<p>来看一下下面两段代码：<br>无论使用何种方式对函数类型的值进行传递，当函数在别处调用时都可以观察到闭包</p>
-<p>###直接传递函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">foo</span></span>()&#123;</div><div class="line">    var a = 2;</div><div class="line">    <span class="keyword">function</span> <span class="function"><span class="title">baz</span></span>()&#123;</div><div class="line">        alert(a);   //2</div><div class="line">    &#125;</div><div class="line">    bar(baz);</div><div class="line">&#125;</div><div class="line"><span class="keyword">function</span> bar(fn)&#123;</div><div class="line">    fn();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>###间接传递函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">var fn;</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">foo</span></span>()&#123;</div><div class="line">    var a = 2;</div><div class="line">    <span class="keyword">function</span> <span class="function"><span class="title">baz</span></span>()&#123;</div><div class="line">        console.log(a);</div><div class="line">    &#125;</div><div class="line">    fn = baz; //将baz分配给全局变量</div><div class="line">&#125;</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">bar</span></span>()&#123;</div><div class="line">    fn();</div><div class="line">&#125;</div><div class="line">foo();</div><div class="line">bar();  //2</div></pre></td></tr></table></figure></p>
-
-          
+          <p>闭包是Javascript的一个难点，听起来很高大上，可能你之前之听过闭包，但并不知道这到底是个什么东西，其实在我们平常编写的代码中，闭包无处不在。<br>以下是我学习闭包的一些心得，希望能对渴望理解闭包的你有一些小小的帮助。</p>
+<h2 id="变量的作用域"><a href="#变量的作用域" class="headerlink" title="变量的作用域"></a>变量的作用域</h2><p>理解闭包首先需要了解的就是变量的作用域。<br>变量的作用域分为两种：局部变量和全局变量。<br>在Javascript中函数内部可以直接读取全局变量，而在函数外部不能读取函数的局部变量。</p>
+<h3 id="函数内部读取全局变量"><a href="#函数内部读取全局变量" class="headerlink" title="函数内部读取全局变量"></a>函数内部读取全局变量</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var a = 111;</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">f1</span></span>()&#123;</div><div class="line">	alert(a);</div><div class="line">&#125;</div><div class="line">f1(); //111</div></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/09/22/闭包/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -366,6 +362,13 @@
           
 
           
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/19/hello-world/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/19/hello-world/" itemprop="commentsCount"></span>
+                </a>
+              </span>
             
           
 
@@ -604,9 +607,30 @@
 
   
 
+  
+    
+  
 
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"SongKai"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
   
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
 
 
 
